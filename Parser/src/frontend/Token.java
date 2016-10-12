@@ -33,10 +33,12 @@ public class Token {
      * Constructor
      * @param source the source from where to fetch the token's characters
      */
-    public Token(Source source) {
+    public Token(Source source) throws Exception {
         this.source = source;
         this.lineNum = source.getLineNum();
         this.position = source.getPosition();
+
+        extract();
     }
 
     /**
@@ -79,4 +81,48 @@ public class Token {
         return source.peekChar();
     }
 
+    /**
+     * Getter
+     * @return the token type
+     */
+    public TokenType getType()
+    {
+        return type;
+    }
+
+    /**
+     * Getter.
+     * @return the token text.
+     */
+    public String getText()
+    {
+        return text;
+    }
+
+    /**
+     * Getter.
+     * @return the token value.
+     */
+    public Object getValue()
+    {
+        return value;
+    }
+
+    /**
+     * Getter.
+     * @return the source line number.
+     */
+    public int getLineNumber()
+    {
+        return lineNum;
+    }
+
+    /**
+     * Getter.
+     * @return the position.
+     */
+    public int getPosition()
+    {
+        return position;
+    }
 }

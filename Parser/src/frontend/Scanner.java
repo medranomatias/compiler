@@ -57,4 +57,13 @@ public abstract class Scanner {
     public char nextChar() throws Exception {
         return source.nextChar();
     }
+    /**
+     * Call the source's currentChar() method.
+     * @return the current character from the source.
+     * @throws Exception if an error occurred.
+     */
+    public char currentChar() throws Exception {
+        return source.currentChar();
+    }
+
 }
