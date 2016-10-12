@@ -46,6 +46,10 @@ public abstract class Parser implements MessageProducer{
         this.iCode = null;
     }
 
+    public SymTab getSymTab() {
+        return symTab;
+    }
+
     /**
      * Parse a source program and generate the intermediate code and the symbol table. To be implemented by a
      * language-specific parser subclass
@@ -89,5 +93,9 @@ public abstract class Parser implements MessageProducer{
     @Override
     public void sendMessage(Message message) {
         messageHandler.sendMessage(message);
+    }
+
+    public ICode getICode() {
+        return iCode;
     }
 }

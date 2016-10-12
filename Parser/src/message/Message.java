@@ -24,4 +24,12 @@ public class Message {
         this.body = body;
         this.type = type;
     }
+
+    public MessageType getType() {
+        return type;
+    }
+
+    public Object getBody() {
+        return body;
+    }
 }
