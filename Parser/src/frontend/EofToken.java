@@ -9,7 +9,7 @@ public class EofToken extends Token{
      *
      * @param source the source from where to fetch the token's characters
      */
-    public EofToken(Source source) {
+    public EofToken(Source source) throws Exception {
         super(source);
     }
 

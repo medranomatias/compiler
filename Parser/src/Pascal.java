@@ -153,7 +153,7 @@ public class Pascal
             switch (type) {
 
                 case PARSER_SUMMARY: {
-                    Number body[] = (Number[]) message.getBody();
+                    Object body[] = (Object[]) message.getBody();
                     int statementCount = (Integer) body[0];
                     int syntaxErrors = (Integer) body[1];
                     float elapsedTime = (Float) body[2];
@@ -192,7 +192,7 @@ public class Pascal
             switch (type) {
 
                 case INTERPRETER_SUMMARY: {
-                    Number body[] = (Number[]) message.getBody();
+                    Object body[] = (Object[]) message.getBody();
                     int executionCount = (Integer) body[0];
                     int runtimeErrors = (Integer) body[1];
                     float elapsedTime = (Float) body[2];
@@ -204,9 +204,9 @@ public class Pascal
                 }
 
                 case COMPILER_SUMMARY: {
-                    Number body[] = (Number[]) message.getBody();
-                    int instructionCount = (Integer) body[0];
-                    float elapsedTime = (Float) body[1];
+                    Object body[] = (Object[]) message.getBody();
+                    int instructionCount = ((Integer) body[0]).intValue();
+                    float elapsedTime = ((Integer) body[1]).floatValue();
 
                     System.out.printf(COMPILER_SUMMARY_FORMAT,
                             instructionCount, elapsedTime);
