@@ -34,6 +34,6 @@ public class Executor extends Backend
         int runtimeErrors = 0;
 
         // Send the interpreter summary message.
-        sendMessage(new Message(MessageType.COMPILER_SUMMARY, new Object[] {executionCount, runtimeErrors, elapsedTime}));
+        sendMessage(new Message(MessageType.COMPILER_SUMMARY, new Number[] {executionCount, runtimeErrors, elapsedTime}));
     }
 }

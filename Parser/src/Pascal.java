@@ -267,7 +267,7 @@ public class Pascal
                 case COMPILER_SUMMARY: {
                     Number body[] = (Number[]) message.getBody();
                     int instructionCount = (Integer) body[0];
-                    float elapsedTime = (Float) body[1];
+                    float elapsedTime = (Integer) body[1];
 
                     System.out.printf(COMPILER_SUMMARY_FORMAT,
                             instructionCount, elapsedTime);
