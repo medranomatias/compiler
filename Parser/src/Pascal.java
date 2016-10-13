@@ -3,6 +3,8 @@ import backend.BackendFactory;
 import frontend.FrontendFactory;
 import frontend.Parser;
 import frontend.Source;
+import frontend.TokenType;
+import frontend.pascal.PascalTokenType;
 import intermediate.ICode;
 import intermediate.SymTab;
 import message.Message;
@@ -76,13 +78,16 @@ public class Pascal
     {
         try {
             String operation = args[0];
+
             // Operation.
-            if (!(   operation.equalsIgnoreCase("compile") || operation.equalsIgnoreCase("execute"))) {
+            if (!(   operation.equalsIgnoreCase("compile")
+                    || operation.equalsIgnoreCase("execute"))) {
                 throw new Exception();
             }
 
             int i = 0;
             String flags = "";
+
             // Flags.
             while ((++i < args.length) && (args[i].charAt(0) == '-')) {
                 flags += args[i].substring(1);
@@ -132,10 +137,17 @@ public class Pascal
         }
     }
 
+    private static final String TOKEN_FORMAT =
+            ">>> %-15s line=%03d, pos=%2d, text=\"%s\"";
+    private static final String VALUE_FORMAT =
+            ">>>                 value=%s";
+
     private static final String PARSER_SUMMARY_FORMAT =
             "\n%,20d source lines." +
                     "\n%,20d syntax errors." +
                     "\n%,20.2f seconds total parsing time.\n";
+
+    private static final int PREFIX_WIDTH = 5;
 
     /**
      * Listener for parser messages.
@@ -152,8 +164,57 @@ public class Pascal
 
             switch (type) {
 
+                case TOKEN: {
+                    Object body[] = (Object []) message.getBody();
+                    int line = (Integer) body[0];
+                    int position = (Integer) body[1];
+                    TokenType tokenType = (TokenType) body[2];
+                    String tokenText = (String) body[3];
+                    Object tokenValue = body[4];
+
+                    System.out.println(String.format(TOKEN_FORMAT, tokenType, line, position, tokenText));
+                    if (tokenValue != null) {
+                        if (tokenType == PascalTokenType.STRING) {
+                            tokenValue = "\"" + tokenValue + "\"";
+                        }
+
+                        System.out.println(String.format(VALUE_FORMAT,
+                                tokenValue));
+                    }
+
+                    break;
+                }
+
+                case SYNTAX_ERROR: {
+                    Object body[] = (Object []) message.getBody();
+                    int lineNumber = (Integer) body[0];
+                    int position = (Integer) body[1];
+                    String tokenText = (String) body[2];
+                    String errorMessage = (String) body[3];
+
+                    int spaceCount = PREFIX_WIDTH + position;
+                    StringBuilder flagBuffer = new StringBuilder();
+
+                    // Spaces up to the error position.
+                    for (int i = 1; i < spaceCount; ++i) {
+                        flagBuffer.append(' ');
+                    }
+
+                    // A pointer to the error followed by the error message.
+                    flagBuffer.append("^\n*** ").append(errorMessage);
+
+                    // Text, if any, of the bad token.
+                    if (tokenText != null) {
+                        flagBuffer.append(" [at \"").append(tokenText)
+                                .append("\"]");
+                    }
+
+                    System.out.println(flagBuffer.toString());
+                    break;
+                }
+
                 case PARSER_SUMMARY: {
-                    Object body[] = (Object[]) message.getBody();
+                    Number body[] = (Number[]) message.getBody();
                     int statementCount = (Integer) body[0];
                     int syntaxErrors = (Integer) body[1];
                     float elapsedTime = (Float) body[2];
@@ -192,7 +253,7 @@ public class Pascal
             switch (type) {
 
                 case INTERPRETER_SUMMARY: {
-                    Object body[] = (Object[]) message.getBody();
+                    Number body[] = (Number[]) message.getBody();
                     int executionCount = (Integer) body[0];
                     int runtimeErrors = (Integer) body[1];
                     float elapsedTime = (Float) body[2];
@@ -204,9 +265,9 @@ public class Pascal
                 }
 
                 case COMPILER_SUMMARY: {
-                    Object body[] = (Object[]) message.getBody();
-                    int instructionCount = ((Integer) body[0]).intValue();
-                    float elapsedTime = ((Integer) body[1]).floatValue();
+                    Number body[] = (Number[]) message.getBody();
+                    int instructionCount = (Integer) body[0];
+                    float elapsedTime = (Float) body[1];
 
                     System.out.printf(COMPILER_SUMMARY_FORMAT,
                             instructionCount, elapsedTime);

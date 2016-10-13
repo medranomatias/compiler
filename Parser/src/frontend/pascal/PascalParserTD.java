@@ -1,9 +1,6 @@
 package frontend.pascal;
 
-import frontend.EofToken;
-import frontend.Parser;
-import frontend.Scanner;
-import frontend.Token;
+import frontend.*;
 import message.Message;
 import message.MessageType;
 
@@ -11,7 +8,10 @@ import message.MessageType;
  * Created by medranomatias on 12/10/2016.
  */
 public class PascalParserTD extends Parser {
-
+    /**
+     *
+     */
+    protected static PascalErrorHandler errorHandler = new PascalErrorHandler();
     /**
      * Constructor
      *
@@ -28,7 +28,17 @@ public class PascalParserTD extends Parser {
         long startTime = System.currentTimeMillis();
 
         while(!((token = nextToken()) instanceof EofToken)){
-
+            TokenType tokenType = token.getType();
+            if(tokenType != PascalTokenType.ERROR){
+                sendMessage(new Message(MessageType.TOKEN, new Object[]{
+                        token.getLineNumber(),
+                        token.getPosition(),
+                        tokenType,
+                        token.getText(),
+                        token.getValue()}));
+            } else {
+                errorHandler.flag(token, (PascalErrorCode) token.getValue(), this);
+            }
         }
         float elapsedTime = (System.currentTimeMillis() - startTime) / 1000F;
         sendMessage(new Message(MessageType.PARSER_SUMMARY, new Object[]{token.getLineNumber(), getErrorCount(), elapsedTime}));
