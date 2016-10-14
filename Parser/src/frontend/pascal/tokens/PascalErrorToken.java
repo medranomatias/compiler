@@ -15,7 +15,7 @@ public class PascalErrorToken extends PascalToken{
      * @param source the source from where to fetch the token's characters.
      * @throws Exception if an error occurred.
      */
-    protected PascalErrorToken(Source source, PascalErrorCode errorCode, String tokenText) throws Exception {
+    public PascalErrorToken(Source source, PascalErrorCode errorCode, String tokenText) throws Exception {
         super(source);
         this.text = tokenText;
         this.type = ERROR;
