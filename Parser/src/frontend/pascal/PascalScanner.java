@@ -4,10 +4,7 @@ import frontend.EofToken;
 import frontend.Scanner;
 import frontend.Source;
 import frontend.Token;
-import frontend.pascal.tokens.PascalErrorToken;
-import frontend.pascal.tokens.PascalSpecialSymbolToken;
-import frontend.pascal.tokens.PascalStringToken;
-import frontend.pascal.tokens.PascalWordToken;
+import frontend.pascal.tokens.*;
 
 /**
  * Created by medranomatias on 12/10/2016.
@@ -32,6 +29,8 @@ public class PascalScanner extends Scanner {
             token = new EofToken(source);
         } else if(Character.isLetter(currentChar)){
             token = new PascalWordToken(source);
+        } else if(Character.isDigit(currentChar)){
+            token = new PascalNumberToken(source);
         } else if (currentChar == '\'') {
             token = new PascalStringToken(source);
         } else if (PascalTokenType.SPECIAL_SYMBOLS.contains(Character.toString(currentChar))){
