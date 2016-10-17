@@ -44,6 +44,7 @@ public class PascalStringToken extends PascalToken {
             if(currentChar != SINGLE_QUOTE && currentChar != Source.EOF){
                 textBuffer.append(currentChar);
                 valueBuffer.append(currentChar);
+                currentChar = nextChar();
             }
             if(currentChar == SINGLE_QUOTE){
                 while(currentChar == SINGLE_QUOTE && peekChar() == SINGLE_QUOTE){
