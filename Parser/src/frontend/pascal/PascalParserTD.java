@@ -46,6 +46,6 @@ public class PascalParserTD extends Parser {
 
     @Override
     public int getErrorCount() {
-        return 0;
+        return errorHandler.getErrorCount();
     }
 }
